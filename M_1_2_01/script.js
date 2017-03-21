@@ -1,7 +1,7 @@
 // jshint ignore: start
 var actRandomSeed = 0;
 var faderX = 0;
-var amountOfCircles = 10;
+var amountOfCircles = 24;
 var circles = [];
 
 function setup(){
@@ -9,8 +9,12 @@ function setup(){
     cursor(CROSS);
     smooth();
 
+    actRandomSeed = random(100000);
+
     for(var i = 0; i < amountOfCircles; i++)
-        circles[i] = new Circle(300 - i*5);
+        circles[i] = new Circle(300 - i*10);
+
+    colorMode(HSB);
 }
 
 function draw(){
@@ -28,12 +32,8 @@ function draw(){
         circles[i].order(faderX);
 }
 
-function mouseReleased(){
-    actRandomSeed = random(100000);
-}
-
 var Circle = function(d){
-    this.count = d * 1.2;
+    this.count = int(d * 0.66);
     this.dim = d;
 };
 Circle.prototype.order = function(faderX){
@@ -41,6 +41,7 @@ Circle.prototype.order = function(faderX){
     var angle = radians(360 / this.count);
 
     for(var i = 0; i < this.count; i++){
+        var a = angle * i;
 
         // Random x and y coordinates
         var randomX = random(0, width);
@@ -49,15 +50,15 @@ Circle.prototype.order = function(faderX){
         // Calculating coordinates within the circle perimeter
         // x : r + cos(angle), y: r + sin(angle) 
         // Varying the factor at the end would give ellipses
-        var circleX = width / 2 + cos(angle * i) * this.dim;
-        var circleY = height / 2 + sin(angle * i) * this.dim;
+        var circleX = width / 2 + cos(a) * this.dim;
+        var circleY = height / 2 + sin(a) * this.dim;
 
         // Linear interpolation between random coordinates and cicle coordinates
         // using faderX as the factor
         var x = lerp(randomX, circleX, faderX);
         var y = lerp(randomY, circleY, faderX);
-
-        fill(0, 130, 164);
-        ellipse(x, y, 5, 5);
+        
+        fill(degrees(a), 100, 100);
+        ellipse(x, y, 8, 8);
     }
 };

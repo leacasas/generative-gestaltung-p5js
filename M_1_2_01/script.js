@@ -1,14 +1,16 @@
 // jshint ignore: start
 var actRandomSeed = 0;
 var faderX = 0;
-var circle;
+var amountOfCircles = 10;
+var circles = [];
 
 function setup(){
     createCanvas(640, 640);
     cursor(CROSS);
     smooth();
 
-    circle = new Circle(360, 300);
+    for(var i = 0; i < amountOfCircles; i++)
+        circles[i] = new Circle(300 - i*5);
 }
 
 function draw(){
@@ -17,20 +19,21 @@ function draw(){
 
     // faderX value between 0 and 1
     if(faderX < 1)
-        faderX += 0.0025;
+        faderX += 0.005;
     
     // Setting seed value for all random() calls
     randomSeed(actRandomSeed);
 
-    circle.order(faderX);
+    for(var i = 0; i < amountOfCircles; i++)
+        circles[i].order(faderX);
 }
 
 function mouseReleased(){
     actRandomSeed = random(100000);
 }
 
-var Circle = function(c, d){
-    this.count = c;
+var Circle = function(d){
+    this.count = d * 1.2;
     this.dim = d;
 };
 Circle.prototype.order = function(faderX){

@@ -1,7 +1,7 @@
 // jshint ignore: start
 var actRandomSeed = 0;
 var faderX = 0;
-var amountOfCircles = 24;
+var amountOfCircles = 32;
 var circles = [];
 
 function setup(){
@@ -12,7 +12,7 @@ function setup(){
     actRandomSeed = random(100000);
 
     for(var i = 0; i < amountOfCircles; i++)
-        circles[i] = new Circle(300 - i*10);
+        circles[i] = new Circle(300 - i*10, 100 - i * 2);
 
     colorMode(HSB);
 }
@@ -32,9 +32,10 @@ function draw(){
         circles[i].order(faderX);
 }
 
-var Circle = function(d){
+var Circle = function(d, b){
     this.count = int(d * 0.66);
     this.dim = d;
+    this.brightness = b;
 };
 Circle.prototype.order = function(faderX){
     // Calculating angle increments according to the number of elements
@@ -58,7 +59,7 @@ Circle.prototype.order = function(faderX){
         var x = lerp(randomX, circleX, faderX);
         var y = lerp(randomY, circleY, faderX);
         
-        fill(degrees(a), 100, 100);
+        fill(degrees(a), 100, this.brightness);
         ellipse(x, y, 8, 8);
     }
 };
